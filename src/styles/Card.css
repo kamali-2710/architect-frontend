@@ -1,0 +1,25 @@
+.common-card{
+  background:rgba(255,255,255,0.07);
+
+  backdrop-filter:blur(18px);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  border-radius:24px;
+
+  padding:18px;
+
+  color:#dbe2ff;
+
+  overflow:hidden;
+
+  transition:0.35s ease;
+
+  box-shadow:0 10px 25px rgba(0,0,0,0.28);
+}
+
+.common-card:hover{
+  transform:translateY(-8px);
+
+  box-shadow:0 8px 28px rgba(124,58,237,0.35);
+}

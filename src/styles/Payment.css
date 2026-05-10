@@ -1,0 +1,175 @@
+.payment-page{
+  display:flex;
+  min-height:100vh;
+  background:#f4f7fb;
+}
+
+/* LEFT */
+
+.payment-banner{
+  width:35%;
+  background:linear-gradient(
+    180deg,
+    #2563eb,
+    #1e40af
+  );
+  color:white;
+  padding:40px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.payment-banner img{
+  width:90%;
+  max-width:350px;
+  margin-bottom:30px;
+}
+
+.banner-content h1{
+  font-size:34px;
+  margin-bottom:15px;
+  font-weight:700;
+  text-align:center;
+}
+
+.banner-content p{
+  font-size:17px;
+  line-height:1.7;
+  text-align:center;
+  opacity:0.95;
+}
+
+/* RIGHT */
+
+.payment-content{
+  flex:1;
+  padding:40px;
+}
+
+.payment-title{
+  font-size:32px;
+  font-weight:700;
+  margin-bottom:30px;
+  color:#111827;
+}
+
+/* GRID */
+
+.payment-grid{
+  display:grid;
+  grid-template-columns:
+  repeat(auto-fit,minmax(300px,1fr));
+  gap:25px;
+}
+
+/* CARD */
+
+.payment-card{
+  background:white;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 4px 18px rgba(0,0,0,0.08);
+  transition:0.3s;
+}
+
+.payment-card:hover{
+  transform:translateY(-5px);
+}
+
+.payment-img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+
+/* DETAILS */
+
+.payment-details{
+  padding:20px;
+}
+
+.payment-details h3{
+  font-size:24px;
+  margin-bottom:15px;
+  color:#111;
+}
+
+.payment-details p{
+  margin-bottom:10px;
+  color:#444;
+  font-size:15px;
+}
+
+/* STATUS */
+
+.paid-status{
+  display:inline-block;
+  margin-top:10px;
+  background:#dcfce7;
+  color:#166534;
+  padding:8px 15px;
+  border-radius:30px;
+  font-size:14px;
+  font-weight:600;
+}
+
+/* BUTTON */
+
+.pay-btn{
+  width:calc(100% - 40px);
+  margin:0 20px 20px;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:#2563eb;
+  color:white;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.pay-btn:hover{
+  background:#1d4ed8;
+}
+
+/* EMPTY */
+
+.empty-box{
+  width:100%;
+  background:white;
+  border-radius:20px;
+  padding:50px;
+  text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,0.08);
+}
+
+.empty-box img{
+  width:140px;
+  margin-bottom:20px;
+}
+
+.empty-box h3{
+  color:#555;
+  font-size:24px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .payment-page{
+    flex-direction:column;
+  }
+
+  .payment-banner{
+    width:100%;
+    padding:30px 20px;
+  }
+
+  .payment-content{
+    padding:25px;
+  }
+}

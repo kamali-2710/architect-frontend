@@ -1,0 +1,177 @@
+.upload-page {
+  padding: 25px;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.upload-page h2 {
+  margin-bottom: 20px;
+  color: #222;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.upload-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 520px));
+  justify-content: center;
+  gap: 25px;
+}
+
+.upload-card {
+  width: 100%;
+  max-width: 520px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+
+.upload-card:hover {
+  transform: translateY(-4px);
+}
+
+.upload-img {
+  width: 100%;
+
+  height: 220px;
+
+  object-fit: cover;
+
+  border-radius: 14px;
+
+  margin-bottom: 15px;
+}
+
+.upload-card h3 {
+  margin-bottom: 10px;
+
+  color: #222;
+
+  font-size: 22px;
+}
+
+.upload-card p {
+  margin-bottom: 15px;
+
+  color: #555;
+
+  font-size: 15px;
+}
+
+.upload-card input {
+  width: 100%;
+
+  margin-bottom: 15px;
+
+  padding: 10px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 10px;
+
+  background: #fff;
+}
+
+.upload-card textarea {
+  width: 100%;
+
+  min-height: 120px;
+
+  padding: 12px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 12px;
+
+  resize: none;
+
+  outline: none;
+
+  margin-bottom: 15px;
+
+  font-size: 15px;
+}
+
+.upload-card textarea:focus {
+  border-color: #2563eb;
+}
+
+.submit-btn {
+  width: 100%;
+
+  padding: 12px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #2563eb;
+
+  color: #fff;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.submit-btn:hover {
+  background: #1e4fd1;
+}
+.files {
+  width: 100%;
+
+  padding: 8px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 10px;
+
+  background: #f1f5f9;
+
+  color: #222;
+
+  cursor: pointer;
+}
+
+/* FILE BUTTON */
+
+.files::file-selector-button {
+  background: #2564ebc7;
+
+  color: white;
+
+  border: none;
+
+  padding: 8px 14px;
+
+  border-radius: 8px;
+
+  margin-right: 12px;
+
+  cursor: pointer;
+}
+
+.files::file-selector-button:hover {
+  background: #1d4ed8;
+}
+.preview-img {
+  width: 100%;
+  max-width: 400px;
+  height: 180px;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+
+  margin-bottom: 15px;
+
+  border: 1px solid #ddd;
+}

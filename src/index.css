@@ -1,0 +1,201 @@
+/* ================= GLOBAL ================= */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* ================= LAYOUT ================= */
+.app-container {
+  height: 100vh;
+  display: grid;
+  grid-template-areas:
+    "aside header"
+    "aside main"
+    "aside footer";
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 70px 1fr 55px;
+
+  background:
+    radial-gradient(circle at top left, #1b2a6b 0%, transparent 40%),
+    radial-gradient(circle at bottom right, #4c1d95 0%, transparent 40%),
+    linear-gradient(135deg, #0b1020, #0f1a3a, #141b4d);
+
+  color: #e5e7eb;
+}
+
+/* ================= ASIDE ================= */
+.app-container aside {
+  grid-area: aside;
+  background: linear-gradient(180deg, #0b0f2a, #140c3d);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  width: 100%;
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🔥 LOGO SECTION (FIXED) */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.sidebar-logo img {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+}
+
+.sidebar-logo h2 {
+  font-size: 16px;
+  color: #fff;
+  /* border: 1px solid; */
+  margin-left: -25px;
+}
+
+/* ================= MENU ================= */
+.sidebar ul {
+  list-style: none;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sidebar li {
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #cbd5e1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.sidebar a:hover {
+  background: rgba(109, 94, 252, 0.15);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+/* ACTIVE LINK */
+.sidebar a.active {
+  background: linear-gradient(135deg, #6d5efc, #8b5cf6);
+  color: white;
+}
+
+/* LOGOUT FIX */
+.logout {
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ================= HEADER ================= */
+.app-container header {
+  grid-area: header;
+  display: flex;
+  /* justify-content: space-between;  */
+  align-items: center;
+  padding: 0 20px;
+  background: rgba(15, 23, 58, 0.85);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* TITLE */
+.header-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 20px;
+}
+
+/* PROFILE */
+.header-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 620px;
+}
+
+.header-profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.header-profile-text h3 {
+  font-size: 13px;
+}
+
+.header-profile-text p {
+  font-size: 11px;
+  color: #a78bfa;
+}
+
+/* ================= MAIN ================= */
+.app-container main {
+  grid-area: main;
+  margin: 15px;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  overflow-y: auto;
+}
+
+/* ================= FOOTER ================= */
+.app-container footer {
+  grid-area: footer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(15, 23, 58, 0.85);
+  font-size: 0.9rem;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+  .app-container {
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+    grid-template-columns: 1fr;
+  }
+
+  .app-container aside {
+    display: none;
+  }
+
+  .header-title {
+    font-size: 14px;
+  }
+
+  .header-profile-text {
+    display: none;
+  }
+}

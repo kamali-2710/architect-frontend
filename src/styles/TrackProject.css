@@ -1,0 +1,123 @@
+.track-page{
+  padding:25px;
+ background:
+    radial-gradient(circle at top left, #1b2a6b 0%, transparent 40%),
+    radial-gradient(circle at bottom right, #4c1d95 0%, transparent 40%),
+    linear-gradient(135deg, #0b1020, #0f1a3a, #141b4d);
+
+  border-radius: 30px;
+  min-height:100vh;
+}
+
+.track-title{
+  font-size:30px;
+  font-weight:700;
+  margin-bottom:30px;
+  color:white;
+}
+
+.track-grid{
+  display:grid;
+  grid-template-columns:
+  repeat(auto-fit,minmax(320px,1fr));
+  gap:25px;
+}
+
+.track-card{
+  background:#fff;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.08);
+  transition:0.3s;
+}
+
+.track-card:hover{
+  transform:translateY(-5px);
+}
+
+.track-card h3{
+  font-size:24px;
+  margin-bottom:10px;
+  color:#111;
+}
+
+.track-status{
+  font-size:15px;
+  margin-bottom:35px;
+  color:#555;
+}
+
+.track-status span{
+  font-weight:700;
+  color:#2d8cff;
+}
+
+/* TRACK */
+
+.track-wrapper{
+  position:relative;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+/* LINE */
+
+.track-line{
+  position:absolute;
+  top:22px;
+  left:40px;
+  right:40px;
+  height:5px;
+  background:#ddd;
+  z-index:1;
+  border-radius:20px;
+}
+
+/* STEP */
+
+.track-step{
+   position:relative;
+  z-index:2;
+  text-align:center;
+  width:70px;
+  background:transparent;
+}
+.track-step.active{
+  background:transparent !important;
+}
+/* CIRCLE */
+
+.circle{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  background:#d1d5db;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:auto;
+  font-weight:bold;
+  font-size:18px;
+  transition:0.3s;
+}
+
+/* ACTIVE */
+
+.track-step.active .circle{
+  background:#2d8cff;
+  box-shadow:0 0 15px rgba(45,140,255,0.5);
+}
+
+.track-step p{
+  margin-top:10px;
+  font-size:13px;
+  color:#444;
+  font-weight:600;
+}
+
+.no-project{
+  font-size:20px;
+  font-weight:600;
+}

@@ -1,0 +1,209 @@
+
+/* Mytask.css */
+
+.mytask-page{
+  padding:20px;
+  min-height:100vh;
+
+  background:
+    radial-gradient(circle at top left,#1b2a6b 0%,transparent 40%),
+    radial-gradient(circle at bottom right,#4c1d95 0%,transparent 40%),
+    linear-gradient(135deg,#0b1020,#0f1a3a,#141b4d);
+
+  border-radius:30px;
+}
+
+/* TITLE */
+.task-title{
+  color:#fff;
+  font-size:28px;
+  margin-bottom:22px;
+  font-weight:700;
+}
+
+/* GRID */
+.task-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(270px,320px));
+  gap:18px;
+}
+
+/* IMAGE */
+.task-img-box{
+  width:100%;
+  height:170px;
+  overflow:hidden;
+  border-radius:14px;
+  margin-bottom:14px;
+}
+
+.task-img-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:14px;
+}
+
+/* TEXT */
+.task-card p{
+  margin:5px 0;
+  font-size:13px;
+  color:#dbe2ff;
+  line-height:1.5;
+}
+
+.task-card b{
+  color:#fff;
+}
+
+/* REQUIREMENT */
+.requirement-box{
+  margin-top:12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius:14px;
+  padding:12px;
+}
+
+.requirement-box h4{
+  color:#fff;
+  margin-bottom:8px;
+  font-size:15px;
+}
+
+.requirement-box p{
+  color:#cbd5e1;
+  font-size:13px;
+  line-height:1.6;
+}
+
+/* VIEW MORE BUTTON */
+.view-more-btn{
+  margin-top:10px;
+  padding:8px 14px;
+  border:none;
+  border-radius:10px;
+  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:#fff;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:600;
+}
+
+/* UPLOAD BUTTON */
+.upload-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 12px;
+  background: #2563eb;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.upload-btn:hover {
+  background: #1d4ed8;
+}
+
+/* EMPTY */
+.no-task{
+  text-align:center;
+  color:#fff;
+  font-size:20px;
+  padding:40px 0;
+}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,0.7);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-box{
+  width:90%;
+  max-width:500px;
+  background:#1e293b;
+  color:#fff;
+  padding:24px;
+  border-radius:20px;
+}
+
+.modal-close-btn{
+  margin-top:18px;
+  padding:10px 16px;
+  background:#ef4444;
+  border:none;
+  border-radius:10px;
+  color:#fff;
+}
+
+/* ===================== */
+/* STATUS SYSTEM (SAFE ADD) */
+/* ===================== */
+
+.task-card{
+  position:relative;
+  padding:15px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+/* BADGE */
+.task-badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  padding:5px 10px;
+  border-radius:8px;
+  font-size:12px;
+  color:#fff;
+  font-weight:600;
+}
+
+/* COLORS */
+.task-badge.completed{ background:#16a34a; }
+.task-badge.rejected{ background:#ef4444; }
+.task-badge.assigned{ background:#3b82f6; }
+.task-badge.under_review{ background:#f97316; }
+
+/* BORDER HIGHLIGHT */
+.completed-task{ border:2px solid #16a34a; }
+.rejected-task{ border:2px solid #ef4444; opacity:0.85; }
+.assigned-task{ border:2px solid #3b82f6; }
+.review-task{ border:2px solid #f97316; }
+
+/* REJECT TEXT */
+.rejected-text{
+  color:#ef4444;
+  font-weight:600;
+}
+
+/* REJECT MESSAGE */
+.reject-msg{
+  margin-top:10px;
+  color:#ef4444;
+  font-weight:700;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .task-grid{
+    grid-template-columns:1fr;
+  }
+
+  .task-img-box{
+    height:180px;
+  }
+
+  .task-title{
+    font-size:24px;
+  }
+}
