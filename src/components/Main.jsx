@@ -13,6 +13,7 @@ import Requirement from "../pages/Requirement";
 import MyProjects from "../pages/MyProjects";
 import TrackProject from "../pages/TrackProject";
 import Payment from "../pages/Payment";
+import Message from "../pages/Message";
 
 const Main = ({ user, setUser, users, setUsers }) => {
   return (
@@ -37,6 +38,7 @@ const Main = ({ user, setUser, users, setUsers }) => {
 
         {/* ARCHITECT */}
         <Route path="/task" element={<Mytask />} />
+        <Route path="/message" element={<Message/>}/>
 
         {/* CLIENT */}
         <Route path="/submit-requirement" element={<Requirement />} />

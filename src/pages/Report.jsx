@@ -1,225 +1,220 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Report.css";
 
 const Report = () => {
+  const [projects, setProjects] = useState([]);
   const [filter, setFilter] = useState("All");
-  const [showForm, setShowForm] = useState(false);
   const [viewData, setViewData] = useState(null);
-  const [editId, setEditId] = useState(null);
 
-  const [form, setForm] = useState({
-    name: "",
-    client: "",
-    architect: "",
-    status: "Pending",
-    amount: "",
-    date: "",
-  });
+  const loadProjects = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/requirements");
 
-  const [projects, setProjects] = useState([
-    {
-      id: "PRJ001",
-      name: "Luxury Villa",
-      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-      architect: "Arun Kumar",
-      status: "Assigned",
-      client: "Karthik",
-      amount: "₹12,00,000",
-      date: "15 Jun 2026",
-    },
-    {
-      id: "PRJ002",
-      name: "Modern Office",
-      image: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-      architect: "",
-      status: "Pending",
-      client: "Vignesh",
-      amount: "₹8,50,000",
-      date: "30 Jun 2026",
-    },
-    {
-      id: "PRJ003",
-      name: "Shopping Mall",
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab",
-      architect: "Priya",
-      status: "Completed",
-      client: "Ramesh",
-      amount: "₹25,00,000",
-      date: "20 Jul 2026",
-    },
-  ]);
+      const data = await res.json();
 
-  // FILTER
+      setProjects(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    loadProjects();
+
+    const interval = setInterval(() => {
+      loadProjects();
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  /* PRINT REPORT */
+
+  const printReport = () => {
+    window.print();
+  };
+
+  /* FILTER */
+
   const filtered =
     filter === "All" ? projects : projects.filter((p) => p.status === filter);
 
-  // CARDS (5 cards FIXED)
-  const total = projects.length;
-  const assigned = projects.filter((p) => p.status === "Assigned").length;
-  const pending = projects.filter((p) => p.status === "Pending").length;
-  const completed = projects.filter((p) => p.status === "Completed").length;
-  const notAssigned = projects.filter(
-    (p) => p.status === "Not Assigned",
-  ).length;
+  /* COUNTS */
 
-  // OPEN FORM
-  const openForm = () => {
-    setShowForm(true);
-    setEditId(null);
+  const assigned = projects.filter((p) => p.status === "ASSIGNED").length;
 
-    setForm({
-      name: "",
-      client: "",
-      architect: "",
-      status: "Pending",
-      amount: "",
-      date: "",
-    });
-  };
+  const pending = projects.filter((p) => p.status === "NEW").length;
 
-  // INPUT
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const completed = projects.filter((p) => p.status === "COMPLETED").length;
 
-  // SAVE (ADD + EDIT)
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const rejected = projects.filter((p) => p.status === "REJECTED").length;
 
-    if (!form.name || !form.client || !form.amount || !form.date) {
-      alert("Fill all fields");
-      return;
-    }
+  /* DELETE */
 
-    if (editId) {
-      setProjects((prev) =>
-        prev.map((p) => (p.id === editId ? { ...p, ...form } : p)),
-      );
-    } else {
-      const newProject = {
-        id: "PRJ" + (projects.length + 1),
-        ...form,
-        image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab",
-      };
-
-      setProjects([newProject, ...projects]);
-    }
-
-    setShowForm(false);
-    setEditId(null);
-  };
-
-  // DELETE
   const handleDelete = (id) => {
-    setProjects((prev) => prev.filter((p) => p.id !== id));
-  };
+    const confirmDelete = window.confirm("Delete this project ?");
 
-  // EDIT
-  const handleEdit = (item) => {
-    setForm(item);
-    setEditId(item.id);
-    setShowForm(true);
+    if (!confirmDelete) return;
+
+    setProjects(projects.filter((item) => item._id !== id));
   };
 
   return (
     <div className="report-page">
       {/* HEADER */}
-      <div className="report-title">
-        <h2>Project Dashboard</h2>
+
+      <div className="report-header">
+        <div>
+          <h2>Project Reports</h2>
+
+          <p>Real-time architecture project monitoring dashboard</p>
+        </div>
 
         <div className="top-actions">
           <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="All">All Status</option>
-            <option value="Assigned">Assigned</option>
-            <option value="Pending">Pending</option>
-            <option value="Completed">Completed</option>
-            <option value="Not Assigned">Not Assigned</option>
+            <option value="All">All Projects</option>
+
+            <option value="NEW">NEW</option>
+
+            <option value="ASSIGNED">ASSIGNED</option>
+
+            <option value="COMPLETED">COMPLETED</option>
+
+            <option value="REJECTED">REJECTED</option>
           </select>
 
-          <button className="add-btn" onClick={openForm}>
-            + Add Project
+          {/* PRINT */}
+
+          <button className="print-btn" onClick={printReport}>
+            <i className="fa-solid fa-print"></i>
+            Print Report
           </button>
         </div>
       </div>
 
-      {/* CARDS (5 CARDS FIXED) */}
-      <div className="card-row">
-        <div className="card assigned">
+      {/* STATS */}
+
+      <div className="stats-grid">
+        <div className="stats-card assigned-card">
           <h4>Assigned</h4>
-          <p>{assigned}</p>
+
+          <h1>{assigned}</h1>
         </div>
 
-        <div className="card pending">
-          <h4>Pending</h4>
-          <p>{pending}</p>
+        <div className="stats-card pending-card">
+          <h4>New</h4>
+
+          <h1>{pending}</h1>
         </div>
 
-        <div className="card completed">
+        <div className="stats-card completed-card">
           <h4>Completed</h4>
-          <p>{completed}</p>
+
+          <h1>{completed}</h1>
         </div>
 
-        <div className="card not">
-          <h4>Not Assigned</h4>
-          <p>{notAssigned}</p>
-        </div>
+        <div className="stats-card rejected-card">
+          <h4>Rejected</h4>
 
-        <div className="card total">
-          <h4>Total</h4>
-          <p>{total}</p>
+          <h1>{rejected}</h1>
         </div>
       </div>
 
       {/* TABLE */}
-      <div className="report-table">
+
+      <div className="table-wrapper">
         <table>
           <thead>
             <tr>
               <th>Project</th>
+
               <th>Client</th>
+
               <th>Architect</th>
-              <th>Date</th>
-              <th>Amount</th>
+
+              <th>Budget</th>
+
               <th>Status</th>
+
+              <th>Payment</th>
+
               <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
             {filtered.map((item) => (
-              <tr key={item.id}>
-                <td className="project-cell">
-                  <img src={item.image} />
-                  <div>
-                    <b>{item.name}</b>
-                    <p>{item.id}</p>
+              <tr key={item._id}>
+                {/* PROJECT */}
+
+                <td>
+                  <div className="project-info">
+                    <img
+                      src={
+                        item.image
+                          ? `http://localhost:5000/${item.image}`
+                          : "/image.jpg"
+                      }
+                      alt=""
+                    />
+
+                    <div>
+                      <h4>{item.project}</h4>
+
+                      <p>{item.type}</p>
+                    </div>
                   </div>
                 </td>
 
-                <td>{item.client}</td>
+                {/* CLIENT */}
+
+                <td>{item.clientName}</td>
+
+                {/* ARCHITECT */}
+
                 <td>{item.architect || "Not Assigned"}</td>
-                <td>{item.date}</td>
-                <td>{item.amount}</td>
+
+                {/* BUDGET */}
+
+                <td>₹{item.budget}</td>
+
+                {/* STATUS */}
 
                 <td>
-                  <span className={`report-status-badge report-${item.status.toLowerCase().replace(" ", "")}`}>
-                  {item.status}</span>
+                  <span className={`status-badge ${item.status}`}>
+                    {item.status}
+                  </span>
                 </td>
 
-                <td className="action-icons">
+                {/* PAYMENT */}
+
+                <td>
+                  <span
+                    className={
+                      item.paymentStatus === "PAID"
+                        ? "paid-badge"
+                        : "pending-badge"
+                    }
+                  >
+                    {item.paymentStatus || "PENDING"}
+                  </span>
+                </td>
+
+                {/* ACTION */}
+
+                <td className="action-btns">
+                  {/* VIEW */}
+
                   <i
-                    className="fa-regular fa-eye view"
+                    className="fa-regular fa-eye view-icon"
                     onClick={() => setViewData(item)}
                   ></i>
 
-                  <i
-                    className="fa-regular fa-pen-to-square edit"
-                    onClick={() => handleEdit(item)}
-                  ></i>
+                  {/* DELETE */}
 
                   <i
-                    className="fa-regular fa-trash-can delete"
-                    onClick={() => handleDelete(item.id)}
+                    className="fa-regular fa-trash-can delete-icon"
+                    onClick={() => handleDelete(item._id)}
                   ></i>
                 </td>
               </tr>
@@ -228,67 +223,46 @@ const Report = () => {
         </table>
       </div>
 
-      {/* FORM */}
-      {showForm && (
-        <div className="popup">
-          <form className="popup-box" onSubmit={handleSubmit}>
-            <h3>{editId ? "Update Project" : "Add Project"}</h3>
+      {/* MODAL */}
 
-            <input name="name" value={form.name} onChange={handleChange} placeholder="Enter Project Name" required />
-            <input name="client" value={form.client} onChange={handleChange} placeholder="Enter Client Name" required />
-            <input
-              name="architect"
-              value={form.architect}
-              onChange={handleChange}
-              placeholder="Enter Architect Name"
-              required
+      {viewData && (
+        <div className="modal">
+          <div className="modal-box">
+            <img
+              src={
+                viewData.image
+                  ? `http://localhost:5000/${viewData.image}`
+                  : "/image.jpg"
+              }
+              alt=""
+              className="modal-img"
             />
 
-            <select name="status" value={form.status} onChange={handleChange}>
-              <option value="Pending">Pending</option>
-              <option value="Assigned">Assigned</option>
-              <option value="Completed">Completed</option>
-              <option value="Not Assigned">Not Assigned</option>
-            </select>
+            <h2>{viewData.project}</h2>
 
-            <input name="amount" value={form.amount} onChange={handleChange} placeholder="Enter Project Amount" required />
-            <input
-              name="date"
-              type="date"
-              value={form.date}
-              onChange={handleChange} required />
+            <p>
+              <b>Client :</b> {viewData.clientName}
+            </p>
 
-            <button type="submit">{editId ? "Update" : "Save"}</button>
-            <button type="button" onClick={() => setShowForm(false)} required>
-              Cancel
+            <p>
+              <b>Architect :</b> {viewData.architect || "Not Assigned"}
+            </p>
+
+            <p>
+              <b>Location :</b> {viewData.location}
+            </p>
+
+            <p>
+              <b>Budget :</b> ₹{viewData.budget}
+            </p>
+
+            <p>
+              <b>Status :</b> {viewData.status}
+            </p>
+
+            <button className="close-btn" onClick={() => setViewData(null)}>
+              Close
             </button>
-          </form>
-        </div>
-      )}
-
-      {/* VIEW */}
-      {viewData && (
-        <div className="popup">
-          <div className="popup-box">
-            <h3>{viewData.name}</h3>
-
-            <p>
-              <b>Client:</b> {viewData.client}
-            </p>
-            <p>
-              <b>Architect:</b> {viewData.architect}
-            </p>
-            <p>
-              <b>Status:</b> {viewData.status}
-            </p>
-            <p>
-              <b>Amount:</b> {viewData.amount}
-            </p>
-            <p>
-              <b>Date:</b> {viewData.date}
-            </p>
-
-            <button onClick={() => setViewData(null)}>Close</button>
           </div>
         </div>
       )}

@@ -35,7 +35,7 @@
 }
 
 .banner-content p{
-  font-size:17px;
+  font-size:15px;
   line-height:1.7;
   text-align:center;
   opacity:0.95;
@@ -107,19 +107,18 @@
 .paid-status{
   display:inline-block;
   margin-top:10px;
-  background:#dcfce7;
-  color:#166534;
-  padding:8px 15px;
+  background:#16a34a;
+  padding:7px 14px;
   border-radius:30px;
-  font-size:14px;
+  font-size:12px;
   font-weight:600;
 }
 
 /* BUTTON */
 
 .pay-btn{
-  width:calc(100% - 40px);
-  margin:0 20px 20px;
+  width:90%;
+  margin:0px 35px 10px;
   padding:14px;
   border:none;
   border-radius:12px;
@@ -141,7 +140,7 @@
   width:100%;
   background:white;
   border-radius:20px;
-  padding:50px;
+  padding:30px;
   text-align:center;
   box-shadow:0 4px 14px rgba(0,0,0,0.08);
 }
@@ -156,20 +155,110 @@
   font-size:24px;
 }
 
-/* MOBILE */
-
-@media(max-width:900px){
+@media (max-width: 768px) {
 
   .payment-page{
-    flex-direction:column;
+    flex-direction: column;
   }
 
   .payment-banner{
-    width:100%;
-    padding:30px 20px;
+    width: 100%;
+    padding: 30px;
+  }
+
+  .payment-banner img{
+    max-width: 280px;
+  }
+
+  .banner-content h1{
+    font-size: 28px;
+  }
+
+  .banner-content p{
+    font-size: 14px;
   }
 
   .payment-content{
-    padding:25px;
+    padding: 25px;
+  }
+
+  .payment-title{
+    font-size: 26px;
+    text-align: center;
+  }
+
+  .payment-grid{
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .pay-btn{
+    width: 100%;
+    margin: 0 0 10px;
+    border-radius: 10px;
+  }
+}
+@media (max-width: 576px) {
+
+  .payment-page{
+    flex-direction: column;
+  }
+
+  .payment-banner{
+    padding: 20px;
+  }
+
+  .payment-banner img{
+    max-width: 220px;
+    margin-bottom: 20px;
+  }
+
+  .banner-content h1{
+    font-size: 22px;
+  }
+
+  .banner-content p{
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .payment-content{
+    padding: 15px;
+  }
+
+  .payment-title{
+    font-size: 20px;
+  }
+
+  .payment-grid{
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .payment-card{
+    border-radius: 15px;
+  }
+
+  .payment-details h3{
+    font-size: 18px;
+  }
+
+  .payment-details p{
+    font-size: 13px;
+  }
+
+  .pay-btn{
+    font-size: 14px;
+    padding: 12px;
+    width: 100%;
+    margin: 0 0 10px;
+  }
+
+  .empty-box{
+    padding: 20px;
+  }
+
+  .empty-box h3{
+    font-size: 18px;
   }
 }

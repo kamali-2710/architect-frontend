@@ -4,6 +4,7 @@ import "../styles/AssignProject.css";
 import "../styles/Card.css";
 
 import Card from "../components/Card";
+import Swal from "sweetalert2";
 
 const AssignArchitect = () => {
   const [projects, setProjects] = useState([]);
@@ -11,61 +12,167 @@ const AssignArchitect = () => {
   const [selectedRequirement, setSelectedRequirement] = useState("");
   const [showModal, setShowModal] = useState(false);
 
+  /* NEW PROJECT ALERT */
+  const [prevCount, setPrevCount] = useState(0);
+
   /* LOAD REQUIREMENTS */
   const loadProjects = async () => {
-    const res = await fetch("http://localhost:5000/api/requirements");
-    const data = await res.json();
-    setProjects(data);
+    try {
+      const res = await fetch("http://localhost:5000/api/requirements");
+
+      const data = await res.json();
+
+      /* ALERT WHEN NEW PROJECT COMES */
+
+      if (prevCount !== 0 && data.length > prevCount) {
+        Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: "#c58122",
+          color: "#ffffff",
+          iconColor: "#ffffff",
+        }).fire({
+          icon: "success",
+          title: "New Project Arrived",
+        });
+      }
+
+      setPrevCount(data.length);
+
+      setProjects(data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   /* LOAD ARCHITECTS */
+
   const loadArchitects = async () => {
-    const res = await fetch("http://localhost:5000/api/users");
-    const users = await res.json();
-    setArchitects(users.filter((u) => u.role === "architect"));
+    try {
+      const res = await fetch("http://localhost:5000/api/users");
+
+      const users = await res.json();
+
+      setArchitects(users.filter((u) => u.role === "architect"));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     loadProjects();
+
     loadArchitects();
-  }, []);
+
+    /* AUTO REFRESH */
+
+    const interval = setInterval(() => {
+      loadProjects();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [prevCount]);
 
   /* ASSIGN / STATUS UPDATE */
+
   const assignArchitect = async (id, architectName, status = null) => {
-    await fetch(`http://localhost:5000/api/requirements/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        architect: architectName,
-        status: status || "ASSIGNED",
-      }),
-    });
+    try {
+      await fetch(`http://localhost:5000/api/requirements/${id}`, {
+        method: "PUT",
 
-    loadProjects();
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-    if (status === "COMPLETED") {
-      alert("Project Approved");
-    } else if (status === "REJECTED") {
-      alert("Project Rejected");
-    } else if (architectName) {
-      alert("Architect Assigned");
+        body: JSON.stringify({
+          architect: architectName,
+
+          status: status || "ASSIGNED",
+        }),
+      });
+
+      loadProjects();
+
+      /* SWEET ALERT */
+
+      if (status === "COMPLETED") {
+        Swal.fire({
+          icon: "success",
+          title: "Project Approved",
+          text: "Project marked as completed",
+          confirmButtonColor: "#6c63ff",
+        });
+      } else if (status === "REJECTED") {
+        Swal.fire({
+          icon: "error",
+          title: "Project Rejected",
+          text: "Project has been rejected",
+          confirmButtonColor: "#6c63ff",
+        });
+      } else if (architectName) {
+        Swal.fire({
+          icon: "success",
+          title: "Architect Assigned",
+          text: `${architectName} assigned successfully`,
+          confirmButtonColor: "#6c63ff",
+        });
+      }
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong",
+        confirmButtonColor: "#6c63ff",
+      });
     }
   };
 
   /* DELETE */
+
   const removeProject = async (id) => {
-    await fetch(`http://localhost:5000/api/requirements/${id}`, {
-      method: "DELETE",
+    const result = await Swal.fire({
+      title: "Delete Project?",
+      text: "This action cannot be undone",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6c63ff",
+      confirmButtonText: "Yes Delete",
     });
 
-    loadProjects();
+    if (!result.isConfirmed) return;
+
+    try {
+      await fetch(`http://localhost:5000/api/requirements/${id}`, {
+        method: "DELETE",
+      });
+
+      loadProjects();
+
+      Swal.fire({
+        icon: "success",
+        title: "Deleted",
+        text: "Project deleted successfully",
+        confirmButtonColor: "#6c63ff",
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Delete failed",
+        confirmButtonColor: "#6c63ff",
+      });
+    }
   };
 
   /* MODAL */
+
   const openModal = (req) => {
     setSelectedRequirement(req);
+
     setShowModal(true);
   };
 
@@ -79,22 +186,30 @@ const AssignArchitect = () => {
         {projects.map((item) => (
           <Card key={item._id}>
             {/* IMAGE */}
+
             <div className="assign-img-box">
-              {/* STATUS BADGE (FIXED) */}
+              {/* STATUS */}
+
               <span
                 className={`assign-badge ${
-                  !item.architect || item.architect === ""
-                    ? "new"
-                    : item.status === "COMPLETED"
-                      ? "completed"
-                      : item.status === "REJECTED"
-                        ? "rejected"
-                        : item.status === "UNDER_REVIEW"
-                          ? "under-review"
-                          : "assigned"
+                  item.paymentStatus === "PAID"
+                    ? "paid"
+                    : !item.architect || item.architect === ""
+                      ? "new"
+                      : item.status === "COMPLETED"
+                        ? "completed"
+                        : item.status === "REJECTED"
+                          ? "rejected"
+                          : item.status === "UNDER_REVIEW"
+                            ? "under-review"
+                            : "assigned"
                 }`}
               >
-                {!item.architect || item.architect === "" ? "NEW" : item.status}
+                {item.paymentStatus === "PAID"
+                  ? "PAID"
+                  : !item.architect || item.architect === ""
+                    ? "NEW"
+                    : item.status}
               </span>
 
               <img
@@ -102,6 +217,7 @@ const AssignArchitect = () => {
                 alt="requirement"
                 onError={(e) => {
                   e.target.onerror = null;
+
                   e.target.src = "image.jpg";
                 }}
               />
@@ -115,6 +231,7 @@ const AssignArchitect = () => {
             </div>
 
             {/* DETAILS */}
+
             <div className="assign-head">
               <h3>{item.project}</h3>
             </div>
@@ -122,29 +239,37 @@ const AssignArchitect = () => {
             <p>
               <b>Client :</b> {item.clientName}
             </p>
+
             <p>
               <b>Location :</b> {item.location}
             </p>
+
             <p>
               <b>Type :</b> {item.type}
             </p>
+
             <p>
               <b>Floor :</b> {item.floor}
             </p>
+
             <p>
               <b>Block :</b> {item.block}
             </p>
+
             <p>
               <b>Budget :</b> ₹{item.budget}
             </p>
+
             <p>
               <b>Deadline :</b> {item.deadline}
             </p>
+
             <p>
               <b>Architect :</b> {item.architect || "Not Assigned"}
             </p>
 
             {/* SUBMITTED WORK */}
+
             {item.completedImage && (
               <div className="submitted-box">
                 <h4>Submitted Work</h4>
@@ -158,6 +283,7 @@ const AssignArchitect = () => {
                 <p>{item.completedNote}</p>
 
                 {/* APPROVE / REJECT */}
+
                 {item.status !== "COMPLETED" && item.status !== "REJECTED" && (
                   <div className="action-buttons">
                     <button
@@ -191,35 +317,44 @@ const AssignArchitect = () => {
             )}
 
             {/* ARCHITECT SELECT */}
-            <select
-              className="architect-select"
-              value={item.architect || ""}
-              onChange={(e) => assignArchitect(item._id, e.target.value)}
-            >
-              <option value="">Select Architect</option>
-              {architects.map((a) => (
-                <option key={a._id} value={a.username}>
-                  {a.username}
-                </option>
-              ))}
-            </select>
+
+            {(!item.status || item.status === "NEW") && (
+              <select
+                className="architect-select"
+                value={item.architect || ""}
+                onChange={(e) => assignArchitect(item._id, e.target.value)}
+              >
+                <option value="">Select Architect</option>
+
+                {architects.map((a) => (
+                  <option key={a._id} value={a.username}>
+                    {a.username}
+                  </option>
+                ))}
+              </select>
+            )}
 
             {/* DELETE */}
-            <button
-              className="assign-delete-btn"
-              onClick={() => removeProject(item._id)}
-            >
-              Delete
-            </button>
+
+            {(!item.status || item.status === "NEW") && (
+              <button
+                className="assign-delete-btn"
+                onClick={() => removeProject(item._id)}
+              >
+                Delete
+              </button>
+            )}
           </Card>
         ))}
       </div>
 
       {/* MODAL */}
+
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <h2>Requirement Details</h2>
+
             <p>{selectedRequirement}</p>
 
             <button

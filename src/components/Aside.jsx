@@ -13,14 +13,14 @@ import {
   FaCreditCard
 } from "react-icons/fa";
 
-const Aside = ({ user }) => {
+const Aside = ({ user, showSidebar }) => {
   return (
-    <aside>
+    <aside className={showSidebar ? "sidebar-open" : "sidebar-close"}>
       <div className="sidebar">
         {/* 🔥 NEW LOGO SECTION */}
         <div className="sidebar-logo">
           <img src="/logo.png" alt="logo" />
-          <h2>rchitect Hub</h2>
+          <h2>Elite Struct</h2>
         </div>
 
         {/* Profile */}
@@ -37,39 +37,40 @@ const Aside = ({ user }) => {
           {/* ADMIN */}
           {user?.role === "admin" && (
             <>
-              <li><Link to="/dashboard"><FaTachometerAlt /> Dashboard</Link></li>
-              <li><Link to="/manage-users"><FaUsers /> Manage Clients</Link></li>
-              <li><Link to="/manage-architects"><FaUserTie /> Manage Architects</Link></li>
-              <li><Link to="/assign-project"><FaTasks />Assign Project</Link></li>
-              <li><Link to="/reports"><FaChartBar /> Reports</Link></li>
+              <li><Link to="/dashboard"><FaTachometerAlt /><span>Dashboard</span></Link></li>
+              
+              <li><Link to="/manage-users"><FaUsers /> <span>Manage Clients</span></Link></li>
+              <li><Link to="/manage-architects"><FaUserTie /><span>Manage Architects</span></Link></li>
+              <li><Link to="/assign-project"><FaTasks /><span>Assign Project</span></Link></li>
+              <li><Link to="/reports"><FaChartBar /> <span>Reports</span></Link></li>
 
               {/* FIXED LOGOUT */}
-              <li className="logout"><Link to="/logout"><FaSignOutAlt /> Logout</Link></li>
+              <li className="logout"><Link to="/logout"><FaSignOutAlt /><span>Logout</span></Link></li>
             </>
           )}
 
           {/* ARCHITECT */}
           {user?.role === "architect" && (
             <>
-              <li><Link to="/dashboard"><FaTachometerAlt /> Dashboard</Link></li>
-              <li><Link to="/task"><FaEye /> My Task</Link></li>
+              <li><Link to="/dashboard"><FaTachometerAlt /><span>Dashboard</span></Link></li>
+              <li><Link to="/task"><FaEye /><span> My Task</span></Link></li>
               {/* <li><Link to="/upload-design"><FaUpload /> Upload</Link></li> */}
-              <li><Link to="/messages"><FaEnvelope /> Messages</Link></li>
+              <li><Link to="/message"><FaEnvelope /> <span>Messages</span></Link></li>
 
-              <li className="logout"><Link to="/logout"><FaSignOutAlt /> Logout</Link></li>
+              <li className="logout"><Link to="/logout"><FaSignOutAlt /> <span>Logout</span></Link></li>
             </>
           )}
 
           {/* USER */}
           {user?.role === "client" && (
             <>
-              <li><Link to="/dashboard"><FaTachometerAlt /> Dashboard</Link></li>
-              <li><Link to="/submit-requirement"><FaFileAlt /> Requirement</Link></li>
-              <li><Link to="/view-design"><FaEye /> My Projects</Link></li>
-              <li><Link to="/track-progress"><FaClock /> Track Project</Link></li>
-              <li><Link to="/payment"><FaCreditCard /> Payment</Link></li>
+              <li><Link to="/dashboard"><FaTachometerAlt /> <span>Dashboard</span></Link></li>
+              <li><Link to="/submit-requirement"><FaFileAlt /> <span>Requirement</span></Link></li>
+              <li><Link to="/view-design"><FaEye /> <span>My Projects</span></Link></li>
+              <li><Link to="/track-progress"><FaClock /> <span>Track Project</span></Link></li>
+              <li><Link to="/payment"><FaCreditCard /> <span>Payment</span></Link></li>
 
-              <li className="logout"><Link to="/logout"><FaSignOutAlt /> Logout</Link></li>
+              <li className="logout"><Link to="/logout"><FaSignOutAlt /> <span>Logout</span></Link></li>
             </>
           )}
 

@@ -10,8 +10,12 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 import Upload from "./pages/Upload";
+
 function App() {
-  // ✅ SAFE PARSE (avoid crash)
+  // ✅ SIDEBAR SHOW / HIDE
+  const [showSidebar, setShowSidebar] = useState(true);
+
+  // ✅ SAFE PARSE
   const [user, setUser] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("user")) || null;
@@ -56,15 +60,29 @@ function App() {
         path="/*"
         element={
           user ? (
-            <div className="app-container">
-              <Header user={user} />
-              <Aside user={user} />
+            <div
+              className={`app-container ${
+                showSidebar ? "sidebar-open-layout" : "sidebar-close-layout"
+              }`}
+            >
+              {/* HEADER */}
+              <Header
+                user={user}
+                showSidebar={showSidebar}
+                setShowSidebar={setShowSidebar}
+              />
+
+              {/* ASIDE */}
+              <Aside user={user} showSidebar={showSidebar} />
+
+              {/* MAIN */}
               <Main
                 user={user}
                 setUser={setUser}
                 users={users}
                 setUsers={setUsers}
               />
+
               <Footer />
             </div>
           ) : (
@@ -72,6 +90,7 @@ function App() {
           )
         }
       />
+
       <Route path="/upload" element={<Upload />} />
     </Routes>
   );

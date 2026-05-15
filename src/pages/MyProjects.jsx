@@ -7,7 +7,7 @@ const MyProjects = () => {
   const [projects, setProjects] = useState([]);
 
   const currentUser =
-    JSON.parse(localStorage.getItem("user"));
+    JSON.parse(localStorage.getItem("user")) || {};
 
   /* LOAD PROJECTS */
 
@@ -15,9 +15,10 @@ const MyProjects = () => {
 
     try {
 
-      const res = await fetch(
-        "http://localhost:5000/api/requirements"
-      );
+      const res =
+        await fetch(
+          "http://localhost:5000/api/requirements"
+        );
 
       const data = await res.json();
 
@@ -32,7 +33,6 @@ const MyProjects = () => {
     } catch (err) {
 
       console.log(err);
-
     }
   };
 
@@ -40,17 +40,13 @@ const MyProjects = () => {
 
     loadProjects();
 
-    /* REALTIME REFRESH */
+    const interval = setInterval(() => {
 
-    const interval =
-      setInterval(() => {
+      loadProjects();
 
-        loadProjects();
+    }, 10000);
 
-      }, 3000);
-
-    return () =>
-      clearInterval(interval);
+    return () => clearInterval(interval);
 
   }, []);
 
@@ -73,12 +69,20 @@ const MyProjects = () => {
               key={item._id}
             >
 
-              {/* STATUS */}
+              {/* STATUS BADGE */}
 
               <span
-                className={`project-badge ${item.status}`}
+                className={`project-badge ${
+                  item.paymentStatus === "PAID"
+                    ? "PAID"
+                    : item.status
+                }`}
               >
-                {item.status}
+                {
+                  item.paymentStatus === "PAID"
+                    ? "PAID"
+                    : item.status
+                }
               </span>
 
               {/* IMAGE */}
@@ -91,15 +95,17 @@ const MyProjects = () => {
                       ? `http://localhost:5000/${item.image}`
                       : "/image.jpg"
                   }
+
                   alt="project"
+
                   className="project-img"
+
                   onError={(e) => {
 
                     e.target.onerror = null;
 
                     e.target.src =
                       "/image.jpg";
-
                   }}
                 />
 
@@ -109,33 +115,38 @@ const MyProjects = () => {
 
               <div className="project-content">
 
-                <h3>
-                  {item.project}
-                </h3>
+                <h3>{item.project}</h3>
 
                 <p>
-                  <b>Client :</b>{" "}
+                  <b>Client :</b>
+                  {" "}
                   {item.clientName}
                 </p>
 
                 <p>
-                  <b>Architect :</b>{" "}
-                  {item.architect ||
-                    "Waiting For Assignment"}
+                  <b>Architect :</b>
+                  {" "}
+                  {
+                    item.architect ||
+                    "Waiting For Assignment"
+                  }
                 </p>
 
                 <p>
-                  <b>Location :</b>{" "}
+                  <b>Location :</b>
+                  {" "}
                   {item.location}
                 </p>
 
                 <p>
-                  <b>Project Type :</b>{" "}
+                  <b>Project Type :</b>
+                  {" "}
                   {item.type}
                 </p>
 
                 <p>
-                  <b>Deadline :</b>{" "}
+                  <b>Deadline :</b>
+                  {" "}
                   {item.deadline}
                 </p>
 
@@ -143,9 +154,7 @@ const MyProjects = () => {
 
                 <div className="req-preview">
 
-                  <h4>
-                    Requirement
-                  </h4>
+                  <h4>Requirement</h4>
 
                   <p>
                     {item.requirement}
@@ -168,12 +177,11 @@ const MyProjects = () => {
                       </h4>
 
                       <p>
-                        Waiting for admin
-                        to assign architect.
+                        Waiting for admin to
+                        assign architect.
                       </p>
 
                     </div>
-
                   )}
 
                   {/* ASSIGNED */}
@@ -188,18 +196,17 @@ const MyProjects = () => {
 
                       <p>
                         {item.architect}
-                        {" "}started working
-                        on your project.
+                        {" "}
+                        started working on
+                        your project.
                       </p>
 
                     </div>
-
                   )}
 
                   {/* UNDER REVIEW */}
 
-                  {item.status ===
-                    "UNDER_REVIEW" && (
+                  {item.status === "UNDER_REVIEW" && (
 
                     <div className="flow-card review">
 
@@ -209,19 +216,51 @@ const MyProjects = () => {
 
                       <p>
                         Architect uploaded
-                        design.
-
-                        Admin reviewing now.
+                        design. Admin reviewing now.
                       </p>
 
                     </div>
+                  )}
 
+                  {/* PAID */}
+
+                  {item.paymentStatus === "PAID" && (
+
+                    <div className="flow-card paid-card">
+
+                      <h4>
+                        Payment Successful
+                      </h4>
+
+                      <p>
+                        Project completed and
+                        payment finished successfully.
+                      </p>
+
+                      {item.completedImage && (
+
+                        <img
+                          src={`http://localhost:5000/${item.completedImage}`}
+
+                          alt="approved"
+
+                          className="completed-img"
+                        />
+                      )}
+
+                      <div className="note-box">
+
+                        {item.completedNote}
+
+                      </div>
+
+                    </div>
                   )}
 
                   {/* COMPLETED */}
 
-                  {item.status ===
-                    "COMPLETED" && (
+                  {item.status === "COMPLETED" &&
+                   item.paymentStatus !== "PAID" && (
 
                     <div className="flow-card completed">
 
@@ -234,19 +273,16 @@ const MyProjects = () => {
                         successfully.
                       </p>
 
-                      {/* ONLY APPROVED IMAGE */}
-
                       {item.completedImage && (
 
                         <img
                           src={`http://localhost:5000/${item.completedImage}`}
+
                           alt="approved"
+
                           className="completed-img"
                         />
-
                       )}
-
-                      {/* FINAL NOTE */}
 
                       <div className="note-box">
 
@@ -255,13 +291,11 @@ const MyProjects = () => {
                       </div>
 
                     </div>
-
                   )}
 
                   {/* REJECTED */}
 
-                  {item.status ===
-                    "REJECTED" && (
+                  {item.status === "REJECTED" && (
 
                     <div className="flow-card rejected">
 
@@ -271,14 +305,11 @@ const MyProjects = () => {
 
                       <p>
                         Admin rejected the
-                        design.
-
-                        Architect working
-                        on rework.
+                        design. Architect
+                        working on rework.
                       </p>
 
                     </div>
-
                   )}
 
                 </div>
@@ -292,9 +323,7 @@ const MyProjects = () => {
         ) : (
 
           <div className="no-project">
-
             No Projects Found
-
           </div>
 
         )}

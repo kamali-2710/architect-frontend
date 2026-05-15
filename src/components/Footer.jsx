@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <>
     <footer>
-     © 2026 Admin Panel | All Rights Reserved
+     © 2026 Elite Struct | All Rights Reserved
     </footer>
     </>
   )

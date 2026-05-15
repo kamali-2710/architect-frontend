@@ -50,35 +50,37 @@
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
 }
 
-table {
+.table-box table {
   width: 100%;
   border-collapse: collapse;
 }
 
-table th {
+.table-box table th {
   text-align: center;
   color: white;
+  background-color: #4c1d95;
   font-size: 15px;
   font-weight: 600;
   border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 20px;
 }
 
 /* Email + Action column perfect center */
-table th:nth-child(4),
-table th:nth-child(7) {
+.table-box table th:nth-child(4),
+.table-box table th:nth-child(7) {
   text-align: center;
   vertical-align: middle;
 }
 
 /* Action buttons center row */
-table td:nth-child(7) {
+.table-box table td:nth-child(7) {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
 }
 
-table td {
+.table-box table td {
   text-align: center;
   padding: 14px;
   color: #e5e7eb;
@@ -86,7 +88,7 @@ table td {
   border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-table tr:hover {
+.table-box table tr:hover {
   background: rgba(255,255,255,0.04);
 }
 
@@ -273,4 +275,162 @@ table tr:hover {
 
 .modal-actions button:last-child:hover {
   background: #dc2626;
+}
+
+/* ================= 768px ================= */
+
+@media (max-width: 768px){
+
+  .manage-users{
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  /* TOP BAR */
+  .top-bar{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .top-bar h2{
+    font-size: 24px;
+  }
+
+  .add-btn{
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  /* TABLE */
+  .table-box{
+    overflow-x: auto;
+  }
+
+  .table-box table{
+    min-width: 850px;
+  }
+
+  .table-box table th,
+  .table-box table td{
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  /* IMAGE */
+  .table-img{
+    width: 45px;
+    height: 45px;
+  }
+
+  /* BUTTONS */
+  .delete-button,
+  .update-btn{
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  /* MODAL */
+  .modal-box{
+    width: 90%;
+    padding: 22px;
+  }
+
+  .modal-box h3{
+    font-size: 22px;
+  }
+
+  .modal-box input,
+  .modal-box select{
+    font-size: 14px;
+    padding: 12px;
+  }
+
+}
+
+/* ================= 576px ================= */
+
+@media (max-width: 576px){
+
+  .manage-users{
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  /* TITLE */
+  .top-bar h2{
+    font-size: 20px;
+  }
+
+  .add-btn{
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  /* TABLE */
+  .table-box{
+    border-radius: 14px;
+  }
+
+  .table-box table{
+    min-width: 750px;
+  }
+
+  .table-box table th,
+  .table-box table td{
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  /* IMAGE */
+  .table-img{
+    width: 40px;
+    height: 40px;
+  }
+
+  /* BADGE */
+  .badge{
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  /* BUTTONS */
+  .delete-button,
+  .update-btn{
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  /* MODAL */
+  .modal-box{
+    width: 95%;
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .modal-box h3{
+    font-size: 20px;
+  }
+
+  .modal-box form{
+    gap: 10px;
+  }
+
+  .modal-box input,
+  .modal-box select{
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .modal-actions{
+    flex-direction: column;
+  }
+
+  .modal-actions button{
+    width: 100%;
+    padding: 11px;
+    font-size: 13px;
+  }
+
 }

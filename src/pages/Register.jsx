@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Register.css";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -16,26 +17,86 @@ const Register = () => {
     experience: "",
     specialization: "",
     location: "",
-    photo: null
+    photo: null,
   });
 
   const [error, setError] = useState("");
 
   /* ================= CHANGE ================= */
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleRole = (role) => {
-    setForm({ ...form, role });
+    setForm({
+      ...form,
+      role,
+    });
   };
 
   /* ================= SUBMIT ================= */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setError("");
+    //regex
+    // const phoneRegex = /^[6-9]\d{9}$/;
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9]).{6,}$/;
+
+    /* PHONE */
+
+    const phone = form.phone.trim();
+
+    /* ONLY NUMBERS */
+
+    if (!/^\d+$/.test(phone)) {
+      setError("Phone number must contain only numbers");
+
+      return;
+    }
+
+    /* EXACTLY 10 DIGITS */
+
+    if (phone.length !== 10) {
+      setError("Phone number must be exactly 10 digits");
+
+      return;
+    }
+
+    /* STARTING NUMBER */
+
+    if (!/^[6-9]/.test(phone)) {
+      setError("Mobile number must start with 6-9");
+
+      return;
+    }
+
+    /* EMAIL */
+
+    if (!emailRegex.test(form.email.trim())) {
+      setError("Enter a valid email address");
+
+      return;
+    }
+
+    /* PASSWORD */
+
+    if (!passwordRegex.test(form.password)) {
+      setError("Password must include uppercase letter and number");
+
+      return;
+    }
+
     if (form.password !== form.confirmPassword) {
-      setError("Password not match");
+      setError("Passwords do not match");
       return;
     }
 
@@ -48,46 +109,64 @@ const Register = () => {
     try {
       const res = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
-        body: formData
+        body: formData,
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        alert("Register Success");
+        Swal.fire({
+          icon: "success",
+          title: "Registration Successful",
+          text: "Your account has been created",
+          confirmButtonColor: "#6c63ff",
+        });
+
         navigate("/login");
       } else {
-        setError(data.message);
+        Swal.fire({
+          icon: "error",
+          title: "Registration Failed",
+          text: data.message,
+          confirmButtonColor: "#6c63ff",
+        });
       }
     } catch (err) {
-      setError("Server error");
+      Swal.fire({
+        icon: "error",
+        title: "Server Error",
+        text: "Something went wrong",
+        confirmButtonColor: "#6c63ff",
+      });
     }
   };
 
   return (
     <div className="Reg-container">
       <div className="Reg-wrapper">
-
         {/* LEFT */}
+
         <div className="Reg-left">
           <div className="brand">
-            <h2>𝔸rchitect Ḧub</h2>
+            <h2>𝔼lite 𝕊truct</h2>
+
             <p>
-              Manage projects, architects and clients with a modern smart system.
+              Manage projects, architects and clients with a modern smart
+              system.
             </p>
 
             <div className="left-stats">
-              <div className="stat-card">
+              <div className="reg-stat-card">
                 <h3>120+</h3>
                 <span>Projects</span>
               </div>
 
-              <div className="stat-card">
+              <div className="reg-stat-card">
                 <h3>45+</h3>
                 <span>Architects</span>
               </div>
 
-              <div className="stat-card">
+              <div className="reg-stat-card">
                 <h3>98%</h3>
                 <span>Success</span>
               </div>
@@ -96,13 +175,19 @@ const Register = () => {
         </div>
 
         {/* RIGHT */}
+
         <div className="Reg-right">
           <form className="Reg-box" onSubmit={handleSubmit}>
             <h2>Create Account</h2>
+
             <p className="subtitle">Register your new account</p>
 
             {/* ROLE */}
-            <label className="role-label">Select Role</label>
+
+            {/* <label className="role-label">
+              Select Role
+            </label> */}
+
             <div className="role-selector">
               <button
                 type="button"
@@ -121,9 +206,10 @@ const Register = () => {
               </button>
             </div>
 
-            {error && <div className="top-error">{error}</div>}
+            {/* {error && <div className="top-error">{error}</div>} */}
 
             {/* ROW 1 */}
+
             <div className="input-row">
               <input
                 type="text"
@@ -154,11 +240,12 @@ const Register = () => {
             />
 
             {/* PASSWORD */}
+
             <div className="input-row">
               <input
                 type="password"
                 name="password"
-                placeholder="Password"
+                placeholder="Min 6 chars, 1 uppercase & 1 number"
                 value={form.password}
                 onChange={handleChange}
                 required
@@ -175,6 +262,7 @@ const Register = () => {
             </div>
 
             {/* CLIENT */}
+
             {form.role === "client" && (
               <input
                 type="text"
@@ -187,6 +275,7 @@ const Register = () => {
             )}
 
             {/* ARCHITECT */}
+
             {form.role === "architect" && (
               <>
                 <div className="input-row">
@@ -218,11 +307,14 @@ const Register = () => {
                   required
                 />
 
-                {/* 🔥 PHOTO UPLOAD */}
                 <input
                   type="file"
+                  required
                   onChange={(e) =>
-                    setForm({ ...form, photo: e.target.files[0] })
+                    setForm({
+                      ...form,
+                      photo: e.target.files[0],
+                    })
                   }
                 />
               </>
@@ -231,9 +323,9 @@ const Register = () => {
             <button type="submit">Register</button>
 
             <p className="signup">
-              Already have account? <Link to="/login">Login</Link>
+              Already have account?
+              <Link to="/login"> Login</Link>
             </p>
-
           </form>
         </div>
       </div>
@@ -241,4 +333,4 @@ const Register = () => {
   );
 };
 
-export default Register;  
+export default Register;
