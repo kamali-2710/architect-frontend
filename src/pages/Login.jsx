@@ -46,7 +46,7 @@ const Login = ({ setUser }) => {
     }
 
     try {
-      const res = await ffetch(LOGIN_API, {
+      const res = await fetch(LOGIN_API, {
         method: "POST",
 
         headers: {
