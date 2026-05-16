@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import "../styles/AssignProject.css";
 import "../styles/Card.css";
 
+import { REQUIREMENTS_API, USERS_API, IMAGE_URL } from "../api/api";
+
 import Card from "../components/Card";
 import Swal from "sweetalert2";
 
@@ -18,7 +20,7 @@ const AssignArchitect = () => {
   /* LOAD REQUIREMENTS */
   const loadProjects = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/requirements");
+      const res = await fetch(REQUIREMENTS_API);
 
       const data = await res.json();
 
@@ -52,7 +54,7 @@ const AssignArchitect = () => {
 
   const loadArchitects = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/users");
+      const res = await fetch(USERS_API);
 
       const users = await res.json();
 
@@ -80,7 +82,7 @@ const AssignArchitect = () => {
 
   const assignArchitect = async (id, architectName, status = null) => {
     try {
-      await fetch(`http://localhost:5000/api/requirements/${id}`, {
+      await fetch(`${REQUIREMENTS_API}/${id}`, {
         method: "PUT",
 
         headers: {
@@ -146,7 +148,7 @@ const AssignArchitect = () => {
     if (!result.isConfirmed) return;
 
     try {
-      await fetch(`http://localhost:5000/api/requirements/${id}`, {
+      await fetch(`${REQUIREMENTS_API}/${id}`, {
         method: "DELETE",
       });
 
@@ -213,7 +215,7 @@ const AssignArchitect = () => {
               </span>
 
               <img
-                src={`http://localhost:5000/${item.image}`}
+                src={`${IMAGE_URL}/${item.image}`}
                 alt="requirement"
                 onError={(e) => {
                   e.target.onerror = null;
@@ -275,7 +277,7 @@ const AssignArchitect = () => {
                 <h4>Submitted Work</h4>
 
                 <img
-                  src={`http://localhost:5000/${item.completedImage}`}
+                  src={`${IMAGE_URL}/${item.completedImage}`}
                   alt="completed"
                   className="submitted-img"
                 />

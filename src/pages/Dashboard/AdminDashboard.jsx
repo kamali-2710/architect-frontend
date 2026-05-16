@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import Stat from "../../components/Stat";
 import DashboardTable from "../../components/DashboardTable";
+import { DASHBOARD_API } from "../../api/api";
 
 import {
   ResponsiveContainer,
@@ -25,7 +26,7 @@ const AdminDashboard = ({ user }) => {
   const [statusData, setStatusData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/dashboard/stats")
+   fetch(DASHBOARD_API)
       .then((res) => res.json())
       .then((data) => {
         setStats(data);
@@ -78,7 +79,6 @@ const AdminDashboard = ({ user }) => {
           className="chart-box"
           style={{
             border: "1px solid rgba(255,255,255,0.08)",
-      
           }}
         >
           <div className="chart-header">
@@ -108,10 +108,7 @@ const AdminDashboard = ({ user }) => {
                 cursor={{ fill: "transparent" }}
               />
 
-              <Bar
-                dataKey="value"
-                fill="url(#barGradient)"
-              />
+              <Bar dataKey="value" fill="url(#barGradient)" />
             </BarChart>
           </ResponsiveContainer>
         </div>

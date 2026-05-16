@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/Upload.css";
 
 import Swal from "sweetalert2";
+import { REQUIREMENTS_API, UPLOAD_WORK_API, IMAGE_URL } from "../api/api";
 
 const Upload = () => {
   const [tasks, setTasks] = useState([]);
@@ -15,28 +16,19 @@ const Upload = () => {
 
   const navigate = useNavigate();
 
-  const currentUser = JSON.parse(
-    localStorage.getItem("user")
-  );
+  const currentUser = JSON.parse(localStorage.getItem("user"));
 
-  const taskId = new URLSearchParams(
-    window.location.search
-  ).get("id");
+  const taskId = new URLSearchParams(window.location.search).get("id");
 
   /* LOAD ONLY SINGLE TASK */
 
   const loadTasks = async () => {
-    const res = await fetch(
-      "http://localhost:5000/api/requirements"
-    );
+    const res = await fetch(REQUIREMENTS_API);
 
     const data = await res.json();
 
     const filtered = data.filter(
-      (item) =>
-        item._id === taskId &&
-        item.architect ===
-          currentUser.username
+      (item) => item._id === taskId && item.architect === currentUser.username,
     );
 
     setTasks(filtered);
@@ -66,23 +58,16 @@ const Upload = () => {
 
     const formData = new FormData();
 
-    formData.append(
-      "completedImage",
-      files[id]
-    );
+    formData.append("completedImage", files[id]);
 
-    formData.append(
-      "completedNote",
-      notes[id]
-    );
+    formData.append("completedNote", notes[id]);
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/requirements/upload/${id}`,
+      const res = await fetch(`${UPLOAD_WORK_API}/${id}`,
         {
           method: "PUT",
           body: formData,
-        }
+        },
       );
 
       if (res.ok) {
@@ -131,31 +116,26 @@ const Upload = () => {
               }}
             >
               <img
-                src={`http://localhost:5000/${item.image}`}
+                src={`${IMAGE_URL}${item.image}`}
                 className="upload-img"
               />
 
               <h3>{item.project}</h3>
 
               <p>
-                <b>Status:</b>{" "}
-                {item.status}
+                <b>Status:</b> {item.status}
               </p>
 
               {/* FILE */}
 
               <input
                 type="file"
-                ref={(el) =>
-                  (fileInputRef.current[item._id] =
-                    el)
-                }
+                ref={(el) => (fileInputRef.current[item._id] = el)}
                 onChange={(e) => {
                   setFiles({
                     ...files,
 
-                    [item._id]:
-                      e.target.files[0],
+                    [item._id]: e.target.files[0],
                   });
 
                   setError("");
@@ -164,19 +144,13 @@ const Upload = () => {
 
               {/* ERROR */}
 
-              {error && (
-                <p className="upload-error-msg">
-                  {error}
-                </p>
-              )}
+              {error && <p className="upload-error-msg">{error}</p>}
 
               {/* PREVIEW */}
 
               {files[item._id] && (
                 <img
-                  src={URL.createObjectURL(
-                    files[item._id]
-                  )}
+                  src={URL.createObjectURL(files[item._id])}
                   className="preview-img"
                 />
               )}
@@ -185,22 +159,17 @@ const Upload = () => {
 
               <textarea
                 placeholder="Notes"
-                value={
-                  notes[item._id] || ""
-                }
+                value={notes[item._id] || ""}
                 onChange={(e) =>
                   setNotes({
                     ...notes,
 
-                    [item._id]:
-                      e.target.value,
+                    [item._id]: e.target.value,
                   })
                 }
               />
 
-              <button className="submit-btn">
-                Submit Work
-              </button>
+              <button className="submit-btn">Submit Work</button>
             </form>
           ))
         ) : (

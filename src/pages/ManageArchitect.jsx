@@ -1,269 +1,168 @@
-import React, {
-  useEffect,
-  useState
-} from "react";
+import React, { useEffect, useState } from "react";
 
 import "../styles/ManageArchitect.css";
 import "../styles/Card.css";
+import { USERS_API, IMAGE_URL } from "../api/api";
 
 import Card from "../components/Card";
 
-const API =
-  "http://localhost:5000/api/users";
 
 const ManageArchitect = () => {
+  const [architects, setArchitects] = useState([]);
 
-  const [architects,
-    setArchitects] =
-    useState([]);
+  const [showModal, setShowModal] = useState(false);
 
-  const [showModal,
-    setShowModal] =
-    useState(false);
+  const [editId, setEditId] = useState(null);
 
-  const [editId,
-    setEditId] =
-    useState(null);
-
-  const [form,
-    setForm] =
-    useState({
-      username: "",
-      phone: "",
-      email: "",
-      experience: "",
-      specialization: "",
-      projects: "",
-      location: "",
-      photo: "",
-    });
+  const [form, setForm] = useState({
+    username: "",
+    phone: "",
+    email: "",
+    experience: "",
+    specialization: "",
+    projects: "",
+    location: "",
+    photo: "",
+  });
 
   /* LOAD */
 
-  const loadArchitects =
-    async () => {
+  const loadArchitects = async () => {
+    const res = await fetch(USERS_API);
 
-      const res =
-        await fetch(API);
+    const data = await res.json();
 
-      const data =
-        await res.json();
+    const onlyArchitects = data.filter((user) => user.role === "architect");
 
-      const onlyArchitects =
-        data.filter(
-          (user) =>
-            user.role ===
-            "architect"
-        );
-
-      setArchitects(
-        onlyArchitects
-      );
-    };
+    setArchitects(onlyArchitects);
+  };
 
   useEffect(() => {
-
     loadArchitects();
-
   }, []);
 
   /* DELETE */
 
-  const deleteArchitect =
-    async (id) => {
+  const deleteArchitect = async (id) => {
+    await fetch(`${USERS_API}/${id}`, {
+      method: "DELETE",
+    });
 
-      await fetch(
-        `${API}/${id}`,
-        {
-          method:
-            "DELETE",
-        }
-      );
-
-      loadArchitects();
-    };
+    loadArchitects();
+  };
 
   /* EDIT */
 
-  const openEdit =
-    (item) => {
+  const openEdit = (item) => {
+    setForm(item);
 
-      setForm(item);
+    setEditId(item._id);
 
-      setEditId(item._id);
-
-      setShowModal(true);
-    };
+    setShowModal(true);
+  };
 
   /* CHANGE */
 
-  const handleChange =
-    (e) => {
-
-      setForm({
-        ...form,
-        [e.target.name]:
-          e.target.value,
-      });
-    };
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   /* UPDATE */
 
-  const handleUpdate =
-    async (e) => {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
 
-      e.preventDefault();
+    await fetch(`${USERS_API}/${editId}`, {
+      method: "PUT",
 
-      await fetch(
-        `${API}/${editId}`,
-        {
-          method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
+      body: JSON.stringify(form),
+    });
 
-          body:
-            JSON.stringify(
-              form
-            ),
-        }
-      );
+    setShowModal(false);
 
-      setShowModal(false);
-
-      loadArchitects();
-    };
+    loadArchitects();
+  };
 
   return (
-
     <div className="architect-page">
-
       <div className="top-bar">
-
-        <h2>
-          Manage Architects
-        </h2>
-
+        <h2>Manage Architects</h2>
       </div>
 
       <div className="card-grid">
-
         {architects.length === 0 ? (
-
-          <p>
-            No Architects Found
-          </p>
-
+          <p>No Architects Found</p>
         ) : (
-
           architects.map((item) => (
-
             <Card key={item._id}>
-
               <img
-                src={`http://localhost:5000/${item.photo}`}
+                src={`${IMAGE_URL}/${item.photo}`}
                 className="arch-img"
                 alt="architect"
               />
 
               <div className="card-content">
-
                 <div className="head-row">
+                  <h3>{item.username}</h3>
 
-                  <h3>
-                    {item.username}
-                  </h3>
-
-                  <span className="status active">
-                    Active
-                  </span>
-
+                  <span className="status active">Active</span>
                 </div>
 
                 <p>
-                  <b>ID :</b>
-                  {" "}
-                  {item._id}
+                  <b>ID :</b> {item._id}
                 </p>
 
                 <p>
-                  <b>Phone :</b>
-                  {" "}
-                  {item.phone}
+                  <b>Phone :</b> {item.phone}
                 </p>
 
                 <p>
-                  <b>Email :</b>
-                  {" "}
-                  {item.email}
+                  <b>Email :</b> {item.email}
                 </p>
 
                 <p>
-                  <b>Experience :</b>
-                  {" "}
-                  {item.experience || "-"}
+                  <b>Experience :</b> {item.experience || "-"}
                 </p>
 
                 <p>
-                  <b>Specialization :</b>
-                  {" "}
-                  {item.specialization || "-"}
+                  <b>Specialization :</b> {item.specialization || "-"}
                 </p>
 
                 <p>
-                  <b>Location :</b>
-                  {" "}
-                  {item.location || "-"}
+                  <b>Location :</b> {item.location || "-"}
                 </p>
 
                 <div className="btn-group">
-
-                  <button
-                    className="edit-btn"
-                    onClick={() =>
-                      openEdit(item)
-                    }
-                  >
+                  <button className="edit-btn" onClick={() => openEdit(item)}>
                     Update
                   </button>
 
                   <button
                     className="delete-btn2"
-                    onClick={() =>
-                      deleteArchitect(
-                        item._id
-                      )
-                    }
+                    onClick={() => deleteArchitect(item._id)}
                   >
                     Delete
                   </button>
-
                 </div>
-
               </div>
-
             </Card>
-
           ))
-
         )}
-
       </div>
 
       {showModal && (
-
         <div className="modal-overlay">
-
           <div className="modal-box">
-
-            <h3>
-              Update Architect
-            </h3>
+            <h3>Update Architect</h3>
 
             <form onSubmit={handleUpdate}>
-
               <input
                 name="username"
                 value={form.username}
@@ -314,30 +213,16 @@ const ManageArchitect = () => {
               />
 
               <div className="modal-actions">
+                <button type="submit">Update</button>
 
-                <button type="submit">
-                  Update
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShowModal(false)
-                  }
-                >
+                <button type="button" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-
               </div>
-
             </form>
-
           </div>
-
         </div>
-
       )}
-
     </div>
   );
 };

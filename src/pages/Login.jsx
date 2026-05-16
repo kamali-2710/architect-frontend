@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import "../styles/Login.css";
 import Swal from "sweetalert2";
 
+import { LOGIN_API } from "../api/api";
+
 const Login = ({ setUser }) => {
   const [phone, setPhone] = useState("");
 
@@ -44,7 +46,7 @@ const Login = ({ setUser }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await ffetch(LOGIN_API, {
         method: "POST",
 
         headers: {

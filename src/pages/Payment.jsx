@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import "../styles/Payment.css";
 import Swal from "sweetalert2";
 
+import { REQUIREMENTS_API, USERS_API, IMAGE_URL } from "../api/api";
+
 const Payment = () => {
   const [projects, setProjects] = useState([]);
 
@@ -12,7 +14,7 @@ const Payment = () => {
 
   const loadProjects = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/requirements");
+      const res = await fetch(REQUIREMENTS_API);
 
       const data = await res.json();
 
@@ -45,7 +47,7 @@ const Payment = () => {
     try {
       /* DIRECT PAID UPDATE */
 
-      await fetch(`http://localhost:5000/api/requirements/${project._id}`, {
+      await fetch(`${REQUIREMENTS_API}/${project._id}`, {
         method: "PUT",
 
         headers: {
@@ -64,7 +66,7 @@ const Payment = () => {
         text: "Project payment completed",
         confirmButtonColor: "#2563eb",
       });
-      
+
       /* RELOAD */
 
       loadProjects();
@@ -146,7 +148,7 @@ const Payment = () => {
                 <img
                   src={
                     item.completedImage
-                      ? `http://localhost:5000/${item.completedImage}`
+                      ? `${IMAGE_URL}${item.completedImage}`
                       : "/image.jpg"
                   }
                   alt=""

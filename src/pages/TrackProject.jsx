@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import "../styles/TrackProject.css";
 
+import { REQUIREMENTS_API } from "../api/api";
+
 const TrackProject = () => {
   const [projects, setProjects] = useState([]);
 
@@ -11,7 +13,7 @@ const TrackProject = () => {
 
   const loadProjects = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/requirements");
+      const res = await fetch(REQUIREMENTS_API);
 
       const data = await res.json();
 

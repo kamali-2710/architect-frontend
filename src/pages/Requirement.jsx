@@ -4,6 +4,7 @@ import Webcam from "react-webcam";
 
 import "../styles/Requirement.css";
 import Swal from "sweetalert2";
+import { REQUIREMENTS_API } from "../api/api";
 
 const Requirement = () => {
   const webcamRef = useRef(null);
@@ -150,7 +151,7 @@ const Requirement = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/requirements", {
+      const res = await fetch(REQUIREMENTS_API, {
         method: "POST",
         body: formData,
       });

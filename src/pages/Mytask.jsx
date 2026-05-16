@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import "../styles/Mytask.css";
 
+import { REQUIREMENTS_API, USERS_API, IMAGE_URL } from "../api/api";
+
 const Mytask = () => {
   const navigate = useNavigate();
 
@@ -14,11 +16,11 @@ const Mytask = () => {
 
   const loadTasks = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/requirements");
+      const res = await fetch(REQUIREMENTS_API);
       const data = await res.json();
 
       const myTasks = data.filter(
-        (item) => item.architect === currentUser.username
+        (item) => item.architect === currentUser.username,
       );
 
       setTasks(myTasks);
@@ -60,15 +62,16 @@ const Mytask = () => {
           tasks.map((item) => (
             <Card
               key={item._id}
-              className={`task-detail ${item.status === "COMPLETED"
-                ? "completed-task"
-                : item.status === "REJECTED"
-                ? "rejected-task"
-                : item.status === "ASSIGNED"
-                ? "assigned-task"
-                : item.status === "UNDER_REVIEW"
-                ? "under_review-task"
-                : ""
+              className={`task-detail ${
+                item.status === "COMPLETED"
+                  ? "completed-task"
+                  : item.status === "REJECTED"
+                    ? "rejected-task"
+                    : item.status === "ASSIGNED"
+                      ? "assigned-task"
+                      : item.status === "UNDER_REVIEW"
+                        ? "under_review-task"
+                        : ""
               }`}
             >
               {/* STATUS BADGE */}
@@ -79,11 +82,7 @@ const Mytask = () => {
               {/* IMAGE */}
               <div className="task-img-box">
                 <img
-                  src={
-                    item.image
-                      ? `http://localhost:5000/${item.image}`
-                      : "/image.jpg"
-                  }
+                  src={item.image ? `${IMAGE_URL}${item.image}` : "/image.jpg"}
                   alt="task"
                 />
               </div>
@@ -91,19 +90,25 @@ const Mytask = () => {
               {/* DETAILS */}
               <h3>{item.project}</h3>
 
-              <p><b>Client :</b> {item.clientName}</p>
-              <p><b>Location :</b> {item.location}</p>
-              <p><b>Type :</b> {item.type}</p>
-              <p><b>Status :</b> {item.status}</p>
+              <p>
+                <b>Client :</b> {item.clientName}
+              </p>
+              <p>
+                <b>Location :</b> {item.location}
+              </p>
+              <p>
+                <b>Type :</b> {item.type}
+              </p>
+              <p>
+                <b>Status :</b> {item.status}
+              </p>
 
               {/* REQUIREMENT */}
               <div className="requirement-box">
                 <h4>Requirement</h4>
 
                 <p
-                  className={
-                    item.status === "REJECTED" ? "rejected-text" : ""
-                  }
+                  className={item.status === "REJECTED" ? "rejected-text" : ""}
                 >
                   {item.requirement?.length > 120
                     ? item.requirement.slice(0, 120) + "..."
@@ -148,10 +153,7 @@ const Mytask = () => {
       {/* MODAL */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div
-            className="modal-box"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <h2>Full Requirement</h2>
             <p>{selectedRequirement}</p>
 
