@@ -1,7 +1,7 @@
 const BASE_URL =
   "https://architect-backend-1.onrender.com/api";
 
-/* AUTH */
+/* AUTH PATH */
 
 export const LOGIN_API =
   `${BASE_URL}/auth/login`;
