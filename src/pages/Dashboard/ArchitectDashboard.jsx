@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import StatCard from "../../components/Stat";
 import DashboardTable from "../../components/DashboardTable";
 import "../../styles/Dashboard.css";
-import { REQUIREMENTS_API, USERS_API, IMAGE_URL } from "../api/api";
+import { REQUIREMENTS_API } from "../../api/api";
 
 const ArchitectDashboard = ({ user }) => {
 
