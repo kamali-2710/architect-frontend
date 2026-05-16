@@ -170,7 +170,7 @@ const MyProjects = () => {
 
                         {item.completedImage && (
                           <img
-                            src={`http://localhost:5000/${item.completedImage}`}
+                            src={`${IMAGE_URL}${item.completedImage}`}
                             alt="approved"
                             className="completed-img"
                           />

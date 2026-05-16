@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import StatCard from "../../components/Stat";
 import DashboardTable from "../../components/DashboardTable";
 import "../../styles/Dashboard.css";
+import { REQUIREMENTS_API, USERS_API, IMAGE_URL } from "../api/api";
 
 const ArchitectDashboard = ({ user }) => {
 
@@ -9,7 +10,7 @@ const ArchitectDashboard = ({ user }) => {
 
   useEffect(() => {
 
-    fetch("http://localhost:5000/api/requirements")
+    fetch(REQUIREMENTS_API)
       .then((res) => res.json())
       .then((data) => {
 

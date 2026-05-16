@@ -5,6 +5,7 @@ import StatCard from "../../components/Stat";
 import DashboardTable from "../../components/DashboardTable";
 
 import "../../styles/Dashboard.css";
+import { REQUIREMENTS_API } from "../../api/api";
 
 const ClientDashboard = ({ user }) => {
 
@@ -14,7 +15,7 @@ const ClientDashboard = ({ user }) => {
 
   useEffect(() => {
 
-    fetch("http://localhost:5000/api/requirements")
+    fetch(REQUIREMENTS_API)
       .then((res) => res.json())
       .then((data) => {
 
