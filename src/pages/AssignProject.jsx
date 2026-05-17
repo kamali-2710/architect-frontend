@@ -215,7 +215,7 @@ const AssignArchitect = () => {
               </span>
 
               <img
-                src={`${IMAGE_URL}/${item.image}`}
+                src={item.image ? `${IMAGE_URL}${item.image}` : "/image.jpg"}
                 alt="requirement"
                 onError={(e) => {
                   e.target.onerror = null;
@@ -277,7 +277,7 @@ const AssignArchitect = () => {
                 <h4>Submitted Work</h4>
 
                 <img
-                  src={`${IMAGE_URL}/${item.completedImage}`}
+                  src={`${IMAGE_URL}${item.completedImage}`}
                   alt="completed"
                   className="submitted-img"
                 />
